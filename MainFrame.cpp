@@ -11,7 +11,7 @@ CMainFrame::CMainFrame(wxWindow* parent)
     SetIcon(wxICON(link));
     SetBackgroundColour(*wxWHITE);
 
-    m_link = new CClient;
+    m_link = new CTCPClient;
     m_resolutionLink = false;
     m_labelLink = wxT("Connect");
 
@@ -87,10 +87,10 @@ void CMainFrame::OnSwitchLink(wxCommandEvent& event)
 
     switch(event.GetId()) {
     case ID_CLIENT:
-        EnablePanelAtSwitch(new CClient, true, wxT("Connect"));
+        EnablePanelAtSwitch(new CTCPClient, true, wxT("Connect"));
         break;
     case ID_SERVER:
-        EnablePanelAtSwitch(new CServer, false, wxT("Listen"));
+        EnablePanelAtSwitch(new CTCPServer, false, wxT("Listen"));
         break;
     }
 }

@@ -3,14 +3,14 @@
 
 #include "baselink.hpp"
 
-class CServer : public CBaseLink
+class CTCPServer : public CBaseLink
 {
 private:
     SOCKET m_listenSocket;
 
 public:
-    CServer();
-    ~CServer();
+    CTCPServer();
+    ~CTCPServer();
 
     bool Connect(const char* address, int port);
     bool Disconnect();

@@ -3,8 +3,8 @@
 
 #include <wx/tglbtn.h>
 
-#include "link/client.hpp"
-#include "link/server.hpp"
+#include "link/tcpclient.hpp"
+#include "link/tcpserver.hpp"
 
 #include <wx/wx.h>
 

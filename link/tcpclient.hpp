@@ -3,11 +3,11 @@
 
 #include "baselink.hpp"
 
-class CClient : public CBaseLink
+class CTCPClient : public CBaseLink
 {
 public:
-    CClient();
-    ~CClient();
+    CTCPClient();
+    ~CTCPClient();
 
     bool Connect(const char* address, int port);
     bool Disconnect();

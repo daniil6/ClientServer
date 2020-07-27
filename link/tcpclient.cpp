@@ -1,17 +1,17 @@
-#include "client.hpp"
+#include "tcpclient.hpp"
 
-CClient::CClient()
+CTCPClient::CTCPClient()
 {
 }
 
-CClient::~CClient()
+CTCPClient::~CTCPClient()
 {
 }
 
 // "192.168.1.34"
 // 55213
 
-bool CClient::Connect(const char* address, int port)
+bool CTCPClient::Connect(const char* address, int port)
 {
     int result = 0;
     WSADATA wsaData;
@@ -52,7 +52,7 @@ bool CClient::Connect(const char* address, int port)
     return true;
 }
 
-bool CClient::Disconnect()
+bool CTCPClient::Disconnect()
 {
     return CloseSocket(m_socket);
 }

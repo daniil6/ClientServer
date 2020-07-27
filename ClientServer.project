@@ -6,10 +6,14 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="link">
-    <File Name="link/server.hpp"/>
-    <File Name="link/server.cpp"/>
-    <File Name="link/client.hpp"/>
-    <File Name="link/client.cpp"/>
+    <File Name="link/udpserver.hpp"/>
+    <File Name="link/udpclient.hpp"/>
+    <File Name="link/udpserver.cpp"/>
+    <File Name="link/udpclient.cpp"/>
+    <File Name="link/tcpserver.hpp"/>
+    <File Name="link/tcpserver.cpp"/>
+    <File Name="link/tcpclient.cpp"/>
+    <File Name="link/tcpclient.hpp"/>
     <File Name="link/baselink.hpp"/>
     <File Name="link/baselink.cpp"/>
   </VirtualDirectory>

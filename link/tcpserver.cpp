@@ -1,14 +1,14 @@
-#include "server.hpp"
+#include "tcpserver.hpp"
 
-CServer::CServer()
+CTCPServer::CTCPServer()
 {
 }
 
-CServer::~CServer()
+CTCPServer::~CTCPServer()
 {
 }
 
-bool CServer::Connect(const char* address, int port)
+bool CTCPServer::Connect(const char* address, int port)
 {
     int result = 0;
     WSADATA wsaData;
@@ -71,7 +71,7 @@ bool CServer::Connect(const char* address, int port)
     return true;
 }
 
-bool CServer::Disconnect()
+bool CTCPServer::Disconnect()
 {
     bool result = true;
     if(CloseSocket(m_socket) == false)
