@@ -19,12 +19,12 @@ public:
     CBaseLink();
     virtual ~CBaseLink();
 
-    bool Send(const char* message);
-    bool Receive(char* message, int size);
+    virtual bool Send(const char* message) = 0;
+    virtual bool Receive(char* message, int size) = 0;
 
     virtual bool Connect(const char* address, int port) = 0;
     virtual bool Disconnect() = 0;
-    
+
     std::string GetError();
 };
 

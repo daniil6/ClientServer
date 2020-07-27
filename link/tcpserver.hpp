@@ -1,9 +1,9 @@
 #ifndef CSERVER_HPP
 #define CSERVER_HPP
 
-#include "baselink.hpp"
+#include "tcpprocess.hpp"
 
-class CTCPServer : public CBaseLink
+class CTCPServer : public CTCPProcess
 {
 private:
     SOCKET m_listenSocket;
@@ -12,8 +12,8 @@ public:
     CTCPServer();
     ~CTCPServer();
 
-    bool Connect(const char* address, int port);
-    bool Disconnect();
+    bool Connect(const char* address, int port) final;
+    bool Disconnect() final;
 };
 
 #endif // CSERVER_HPP

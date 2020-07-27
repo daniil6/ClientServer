@@ -6,6 +6,10 @@
     </Plugin>
   </Plugins>
   <VirtualDirectory Name="link">
+    <File Name="link/udpprocess.hpp"/>
+    <File Name="link/udpprocess.cpp"/>
+    <File Name="link/tcpprocess.hpp"/>
+    <File Name="link/tcpprocess.cpp"/>
     <File Name="link/udpserver.hpp"/>
     <File Name="link/udpclient.hpp"/>
     <File Name="link/udpserver.cpp"/>

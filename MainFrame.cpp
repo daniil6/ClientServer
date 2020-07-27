@@ -11,11 +11,17 @@ CMainFrame::CMainFrame(wxWindow* parent)
     SetIcon(wxICON(link));
     SetBackgroundColour(*wxWHITE);
 
+    m_idProtocol = ID_TCP;
+    m_idLink = ID_CLIENT;
+
     m_link = new CTCPClient;
     m_resolutionLink = false;
     m_labelLink = wxT("Connect");
 
     m_indicateLink = new wxStaticBitmap(this, NewControlId(), wxICON(disconnect));
+
+    m_btnTcp = new wxRadioButton(this, ID_TCP, wxT("TCP"), DEF_RECT, wxRB_GROUP);
+    m_btnUdp = new wxRadioButton(this, ID_UDP, wxT("UDP"));
 
     m_btnClient = new wxRadioButton(this, ID_CLIENT, wxT("Client"), DEF_RECT, wxRB_GROUP);
     m_btnServer = new wxRadioButton(this, ID_SERVER, wxT("Server"));
@@ -37,6 +43,11 @@ CMainFrame::CMainFrame(wxWindow* parent)
     wxStaticBoxSizer* st_box = nullptr;
 
     h_box->Add(m_indicateLink);
+
+    st_box = new wxStaticBoxSizer(wxHORIZONTAL, this, wxT("Choose protocol"));
+    st_box->Add(m_btnTcp);
+    st_box->Add(m_btnUdp);
+    h_box->Add(st_box, 0, wxRIGHT, 5);
 
     st_box = new wxStaticBoxSizer(wxHORIZONTAL, this, wxT("Choose link"));
     st_box->Add(m_btnClient);
@@ -67,6 +78,9 @@ CMainFrame::CMainFrame(wxWindow* parent)
 
     Bind(wxEVT_RADIOBUTTON, &CMainFrame::OnSwitchLink, this, ID_CLIENT);
     Bind(wxEVT_RADIOBUTTON, &CMainFrame::OnSwitchLink, this, ID_SERVER);
+    Bind(wxEVT_RADIOBUTTON, &CMainFrame::OnSwitchProtocol, this, ID_UDP);
+    Bind(wxEVT_RADIOBUTTON, &CMainFrame::OnSwitchProtocol, this, ID_TCP);
+
     Bind(wxEVT_BUTTON, &CMainFrame::OnLink, this, m_btnLink->GetId());
     Bind(wxEVT_TEXT_ENTER, &CMainFrame::OnSend, this, m_txtSend->GetId());
 
@@ -80,19 +94,42 @@ CMainFrame::~CMainFrame()
         delete m_link;
 }
 
-void CMainFrame::OnSwitchLink(wxCommandEvent& event)
+void CMainFrame::SwitchLinkAndProtocol()
 {
     if(m_link != nullptr)
         delete m_link;
 
-    switch(event.GetId()) {
-    case ID_CLIENT:
+    if(m_idProtocol == ID_TCP && m_idLink == ID_CLIENT) {
         EnablePanelAtSwitch(new CTCPClient, true, wxT("Connect"));
-        break;
-    case ID_SERVER:
-        EnablePanelAtSwitch(new CTCPServer, false, wxT("Listen"));
-        break;
+        return;
     }
+
+    if(m_idProtocol == ID_TCP && m_idLink == ID_SERVER) {
+        EnablePanelAtSwitch(new CTCPServer, false, wxT("Listen"));
+        return;
+    }
+
+    if(m_idProtocol == ID_UDP && m_idLink == ID_CLIENT) {
+        EnablePanelAtSwitch(new CUDPClient, true, wxT("Connect"));
+        return;
+    }
+
+    if(m_idProtocol == ID_UDP && m_idLink == ID_SERVER) {
+        EnablePanelAtSwitch(new CUDPServer, false, wxT("Listen"));
+        return;
+    }
+}
+
+void CMainFrame::OnSwitchProtocol(wxCommandEvent& event)
+{
+    m_idProtocol = event.GetId();
+    SwitchLinkAndProtocol();
+}
+
+void CMainFrame::OnSwitchLink(wxCommandEvent& event)
+{
+    m_idLink = event.GetId();
+    SwitchLinkAndProtocol();
 }
 
 void CMainFrame::OnLink(wxCommandEvent& event)
@@ -139,9 +176,9 @@ void CMainFrame::Process()
             char message[100] = { 0 };
             int size = sizeof(message) / sizeof(message[0]);
 
-            if(m_link->Receive(message, size) == false)
-                Link();
-            else
+            if(m_link->Receive(message, size) == false) {
+                // Link();
+            } else
                 m_txtReceive->AppendText(wxString::FromUTF8(message) + wxT('\n'));
 
             std::cout << m_link->GetError();
