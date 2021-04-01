@@ -1,27 +1,33 @@
 #ifndef CMAINFRAME_H
 #define CMAINFRAME_H
 
-#include <wx/tglbtn.h>
-
-#include "link/tcpclient.hpp"
-#include "link/tcpserver.hpp"
-#include "link/udpclient.hpp"
-#include "link/udpserver.hpp"
-
+// #include <wx/tglbtn.h>
+#include <thread>
 #include <wx/wx.h>
+
+// #include "link/tcpclient.hpp"
+// #include "link/tcpserver.hpp"
+// #include "link/udpclient.hpp"
+// #include "link/udpserver.hpp"
+
+#include <win/socket/tcpclient.h>
+#include <win/socket/tcpserver.h>
 
 class CMainFrame : public wxFrame
 {
 private:
-    enum { ID_CLIENT = wxID_HIGHEST + 1, ID_SERVER, ID_UDP, ID_TCP };
+    enum { ID_CLIENT = wxID_HIGHEST + 1, ID_SERVER, ID_UDP, ID_TCP, ID_DISCONNECT };
 
-    int m_idProtocol;
     int m_idLink;
+    int m_idProtocol;
+    int m_idArchitect;
 
     bool m_resolutionLink;
     wxString m_labelLink;
 
-    CBaseLink* m_link;
+    // CBaseLink* m_link;
+
+    CTCPBase* m_links;
 
     wxButton* m_btnLink;
     wxTextCtrl* m_txtPort;
@@ -36,11 +42,16 @@ private:
 
     wxStaticBitmap* m_indicateLink;
 
+    std::thread* thrLink;
+    void FuncServer();
+    void FuncClient();
+    void FuncReceiveMessage(const uint8_t* data, const int& size);
+
     void Link();
     void Process();
     void SwitchLinkAndProtocol();
     void EnablePanelAtLink(wxString labelLink, bool enablePanel, wxIcon ico);
-    void EnablePanelAtSwitch(CBaseLink* link, bool enableAddress, wxString labelLink);
+    void EnablePanelAtSwitch(CTCPBase* link, bool enableAddress, wxString labelLink);
 
     void OnSend(wxCommandEvent& event);
     void OnLink(wxCommandEvent& event);
