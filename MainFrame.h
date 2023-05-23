@@ -1,66 +1,79 @@
-#ifndef CMAINFRAME_H
-#define CMAINFRAME_H
+#pragma once
 
-// #include <wx/tglbtn.h>
-#include <thread>
-#include <wx/wx.h>
+#include <wx/atomic.h>
+#include <wx/button.h>
+#include <wx/checkbox.h>
+#include <wx/combobox.h>
+#include <wx/frame.h>
+#include <wx/listbox.h>
+#include <wx/radiobut.h>
+#include <wx/statbmp.h>
+#include <wx/textctrl.h>
 
-// #include "link/tcpclient.hpp"
-// #include "link/tcpserver.hpp"
-// #include "link/udpclient.hpp"
-// #include "link/udpserver.hpp"
+#include <win/socket/basesocket.h>
 
-#include <win/socket/tcpclient.h>
-#include <win/socket/tcpserver.h>
+#include <queue>
 
 class CMainFrame : public wxFrame
 {
 private:
     enum { ID_CLIENT = wxID_HIGHEST + 1, ID_SERVER, ID_UDP, ID_TCP, ID_DISCONNECT };
 
-    int m_idLink;
-    int m_idProtocol;
-    int m_idArchitect;
+    enum { MESSAGE, CONNECTED, DISCONNECTED };
 
-    bool m_resolutionLink;
+    std::queue<std::pair<int, wxString>> m_queue_process;
+
+    bool m_link;
+
+    bool m_focused_txt_remote_port;
+    bool m_focused_txt_locale_port;
+
     wxString m_labelLink;
 
-    // CBaseLink* m_link;
-
-    CTCPBase* m_links;
+    CBaseSocket* m_architecture;
 
     wxButton* m_btnLink;
-    wxTextCtrl* m_txtPort;
+
+    wxComboBox* m_txt_address;
+    wxTextCtrl* m_txt_locale_port;
+    wxTextCtrl* m_txt_remote_port;
+
     wxTextCtrl* m_txtSend;
-    wxTextCtrl* m_txtAddress;
     wxTextCtrl* m_txtReceive;
+
+    wxListBox* m_list_link;
 
     wxRadioButton* m_btnUdp;
     wxRadioButton* m_btnTcp;
     wxRadioButton* m_btnClient;
     wxRadioButton* m_btnServer;
 
+    wxCheckBox* m_chOpenSSL;
+
     wxStaticBitmap* m_indicateLink;
 
-    std::thread* thrLink;
-    void FuncServer();
-    void FuncClient();
-    void FuncReceiveMessage(const uint8_t* data, const int& size);
+    wxAtomicInt m_process;
 
-    void Link();
+    void CloseLink(const SOCKET& socket);
+    void FuncReceiveMessage(const SOCKET& socket, const char* data, const int& size);
+
     void Process();
-    void SwitchLinkAndProtocol();
-    void EnablePanelAtLink(wxString labelLink, bool enablePanel, wxIcon ico);
-    void EnablePanelAtSwitch(CTCPBase* link, bool enableAddress, wxString labelLink);
+    void EnablePanelAtLink(const wxString& labelLink, bool enablePanel, const wxIcon& ico);
+    void EnablePanelAtSwitch(CBaseSocket* link, const wxString& labelLink);
 
     void OnSend(wxCommandEvent& event);
     void OnLink(wxCommandEvent& event);
-    void OnSwitchLink(wxCommandEvent& event);
-    void OnSwitchProtocol(wxCommandEvent& event);
+
+    void OnSwitchMode(wxCommandEvent& event);
+
+    void OnIdle(wxIdleEvent& event);
+
+    void OnSetFocusRemotePort(wxFocusEvent& event);
+    void OnSetFocusLocalePort(wxFocusEvent& event);
+
+    void OnClose(wxCloseEvent& event);
 
 public:
     CMainFrame(wxWindow* parent = nullptr);
-    ~CMainFrame();
+    ~CMainFrame() override;
 };
-
-#endif // CMAINFRAME_H
