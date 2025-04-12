@@ -11,3 +11,5 @@ mingw32-make
 md %OUTPUT_NAME%-%VERSION%
 
 move %OUTPUT_NAME%-Release-%VERSION%.exe %OUTPUT_NAME%-%VERSION%\%OUTPUT_NAME%-Release-%VERSION%.exe
+
+@pause
