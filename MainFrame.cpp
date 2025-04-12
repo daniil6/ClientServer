@@ -161,12 +161,12 @@ void CMainFrame::Process()
 
             auto& item = m_queue_process.front();
             switch(item.first) {
-            case DISCONNECTED:
-                EnablePanelAtLink(m_labelLink, true, wxICON(disconnect));
-                break;
-            case MESSAGE:
-                m_txtReceive->AppendText(item.second + wxT('\n'));
-                break;
+                case DISCONNECTED:
+                    EnablePanelAtLink(m_labelLink, true, wxICON(disconnect));
+                    break;
+                case MESSAGE:
+                    m_txtReceive->AppendText(item.second + wxT('\n'));
+                    break;
             }
 
             m_queue_process.pop();
@@ -292,7 +292,7 @@ void CMainFrame::OnLink(wxCommandEvent& WXUNUSED(event))
             m_architecture->SetLocalPort(locale_port);
             m_architecture->SetRemotePort(remote_port);
             m_architecture->SetCloseFunction([this](const SOCKET& socket) { CloseLink(socket); });
-            m_architecture->SetPrintFunction([this](const SOCKET& socket, const char* data, const int& size) {
+            m_architecture->SetReceiveFunction([this](const SOCKET& socket, const char* data, const int& size) {
                 FuncReceiveMessage(socket, data, size);
             });
 

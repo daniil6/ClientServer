@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(ClientServer VERSION 2.0.0)
+file(STRINGS "version" VERSION)
+
+project(ClientServer VERSION ${VERSION})
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_VERBOSE_MAKEFILE OFF)
@@ -35,7 +37,7 @@ add_executable(${PROJECT_NAME})
 set_target_properties(${PROJECT_NAME}
         PROPERTIES
         OUTPUT_NAME ${PROJECT_NAME}-${CMAKE_BUILD_TYPE}-${PROJECT_VERSION}
-        )
+)
 
 target_sources(${PROJECT_NAME} PRIVATE rc/res.rc)
 target_sources(${PROJECT_NAME} PRIVATE main.cpp)
